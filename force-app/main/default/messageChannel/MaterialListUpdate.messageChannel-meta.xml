@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+    <masterLabel>MaterialListUpdate</masterLabel>
+    <description>This message is fired when the bear list is updated.</description>
+    <lightningMessageFields>
+        <fieldName>materials</fieldName>
+        <description>List of material records.</description>
+    </lightningMessageFields>
+</LightningMessageChannel>

@@ -1,0 +1,34 @@
+<template>
+    <lightning-card title="不足材料リスト">
+        <lightning-layout>
+            <table>
+                <thead>
+                    <tr>
+                        <th>材料名</th>
+                        <th>在庫数</th>
+                        <th>不足数</th>
+                        <th>購入数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={materialList} for:item="mat">
+                        <tr key={mat.Id}>
+                            <td>{mat.Name}</td>
+                            <td>{mat.Stock__c}</td>
+                            <td>{mat.MissingCount__c}</td>
+                            <td>
+                                <input type="number" name="input1" />
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </lightning-layout>
+        <lightning-layout>
+            <div class="botton-component">
+                <input value="3" type="number" name="getRange" onchange={handleSearchRangeChange}></input><p>日後まで</p>
+                <lightning-button variant="brand" label="登録" onclick={gotoNewSchedulePage} class="rightside"></lightning-button>
+            </div>
+        </lightning-layout>
+    </lightning-card>
+</template>

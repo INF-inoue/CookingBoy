@@ -1,0 +1,63 @@
+<template>
+    <lightning-card title="晩御飯の予定">
+        <lightning-layout>
+            <div class="botton-component">
+                <!-- <template if:false={beforRengeFlag}>
+                    <lightning-button variant="brand" label="前へ" onclick={handleClick} value="-1"></lightning-button>
+                </template>
+                <template if:false={afterRengeFlag}>
+                    <lightning-button variant="brand" label="後へ" onclick={handleClick} value="1" class="rightside"></lightning-button>
+                </template> -->
+            </div>
+        </lightning-layout>
+        <lightning-layout>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <template for:each={dateRange} for:item="date">
+                            <th id={date} key={date}>{date}</th>
+                        </template>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>メニュー</td>
+                        <template for:each={dataRange} for:item="d">
+                            <td key={d.Id}>
+                                <button class="recordPageLinks" onclick={gotoRecodePage} title={d.Id}>{d.Name}</button>
+                            </td>
+                        </template>
+                    </tr>
+                    <tr>
+                        <td id="img">img</td>
+                        <template for:each={dataRange} for:item="d">
+                            <td id={d.Id} key={d.Id}>
+                                <lightning-formatted-rich-text
+                                    value={d.CompImage__c}
+                                    onclick={gotoRecodePage}
+                                    title={d.Id}
+                                ></lightning-formatted-rich-text>
+                            </td>
+                        </template>
+                    </tr>
+                    <tr>
+                        <td>調理済にする</td>
+                        <template for:each={dataRange} for:item="d">
+                            <td key={d.id}>
+                                <template if:false={d.CreateFlag__c}>
+                                    <lightning-button class="compButton" variant="brand" label="完了" value={d.ScheduleID__c} onclick={handleClickApply}></lightning-button>
+                                </template>
+                            </td>
+                        </template>
+                    </tr>
+                </tbody>
+            </table>
+        </lightning-layout>
+        <lightning-layout>
+            <div class="botton-component">
+                <lightning-button variant="brand" label="スケジュール追加" onclick={gotoNewSchedulePage} class="rightside"></lightning-button>
+            </div>
+        </lightning-layout>
+    </lightning-card>
+</template>
