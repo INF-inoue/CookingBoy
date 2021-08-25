@@ -14,10 +14,10 @@
                     <template for:each={materialList} for:item="mat">
                         <tr key={mat.Id}>
                             <td>{mat.Name}</td>
-                            <td>{mat.Stock__c}</td>
-                            <td>{mat.MissingCount__c}</td>
+                            <td>{mat.Stock__c}{mat.Unit__c}</td>
+                            <td>{mat.MissingCount__c}{mat.Unit__c}</td>
                             <td>
-                                <input type="number" name="input1" />
+                                <input id={mat.Id} type="number" name="input" onchange={handleChange}/>
                             </td>
                         </tr>
                     </template>
@@ -26,8 +26,8 @@
         </lightning-layout>
         <lightning-layout>
             <div class="botton-component">
-                <input value="3" type="number" name="getRange" onchange={handleSearchRangeChange}></input><p>日後まで</p>
-                <lightning-button variant="brand" label="登録" onclick={gotoNewSchedulePage} class="rightside"></lightning-button>
+                <input value="2" type="number" name="getRange" onchange={handleSearchRangeChange} />日後まで
+                <lightning-button variant="brand" label="登録" onclick={applyWarehousing} class="rightside"></lightning-button>
             </div>
         </lightning-layout>
     </lightning-card>

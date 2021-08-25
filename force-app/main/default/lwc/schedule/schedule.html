@@ -2,26 +2,46 @@
     <lightning-card title="晩御飯の予定">
         <lightning-layout>
             <div class="botton-component">
-                <!-- <template if:false={beforRengeFlag}>
+                <template if:false={beforRengeFlag}>
                     <lightning-button variant="brand" label="前へ" onclick={handleClick} value="-1"></lightning-button>
                 </template>
-                <template if:false={afterRengeFlag}>
-                    <lightning-button variant="brand" label="後へ" onclick={handleClick} value="1" class="rightside"></lightning-button>
-                </template> -->
             </div>
         </lightning-layout>
         <lightning-layout>
             <table>
                 <thead>
                     <tr>
-                        <th></th>
+                        <!-- <th></th>
                         <template for:each={dateRange} for:item="date">
                             <th id={date} key={date}>{date}</th>
-                        </template>
+                        </template> -->
+                        <th>日付</th>
+                        <th>メニュー</th>
+                        <th>写真</th>
+                        <th>完了にする</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <template for:each={dataRange} for:item="d">
+                        <tr key={d.Id}>
+                            <td>{d.date}</td>
+                            <td onclick={gotoRecodePage}
+                                title={d.data.Id}>{d.data.Name}</td>
+                            <td>
+                                <lightning-formatted-rich-text
+                                    value={d.data.CompImage__c}
+                                    onclick={gotoRecodePage}
+                                    title={d.data.Id}
+                                ></lightning-formatted-rich-text>
+                            </td>
+                            <td>
+                                <template if:false={d.data.CreateFlag__c}>
+                                    <lightning-button class="compButton" variant="brand" label="完了" value={d.data.ScheduleID__c} onclick={handleClickApply}></lightning-button>
+                                </template>
+                            </td>
+                        </tr>
+                    </template>
+                    <!-- <tr>
                         <td>メニュー</td>
                         <template for:each={dataRange} for:item="d">
                             <td key={d.Id}>
@@ -50,12 +70,15 @@
                                 </template>
                             </td>
                         </template>
-                    </tr>
+                    </tr> -->
                 </tbody>
             </table>
         </lightning-layout>
         <lightning-layout>
             <div class="botton-component">
+                <template if:false={afterRengeFlag}>
+                    <lightning-button variant="brand" label="後へ" onclick={handleClick} value="1"></lightning-button>
+                </template>
                 <lightning-button variant="brand" label="スケジュール追加" onclick={gotoNewSchedulePage} class="rightside"></lightning-button>
             </div>
         </lightning-layout>

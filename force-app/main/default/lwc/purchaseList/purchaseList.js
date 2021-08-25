@@ -1,21 +1,14 @@
-import { publish, MessageContext } from 'lightning/messageService';
-import Material_LIST_UPDATE_MESSAGE from '@salesforce/messageChannel/MaterialListUpdate__c';
 import { NavigationMixin } from 'lightning/navigation';
 import { LightningElement, api, wire } from 'lwc';
 
-// lightning appのWindowを閉じる用
-import { CloseActionScreenEvent } from 'lightning/actions';
-
-// 開いているページのレコードを取得する
-import { getRecord } from 'lightning/uiRecordApi';
-
 // ApexのMethod
 import getMissingList from '@salesforce/apex/MissingMaterialList.getMissingMaterials'
-import setMaterial from '@salesforce/apex/MaterialController.setRecord'
+import setMissMatRecords from '@salesforce/apex/MissingMaterialList.setMissMatRecords'
 
 export default class puchaseList extends NavigationMixin(LightningElement) {
-    searchRange;
+    searchRange = 2;
     materialList;
+    PurchaseQuantity = {};
 
 // searchTermが更新されたらApexからデータを取得する
     @wire(getMissingList, {searchRange: '$searchRange'})
@@ -32,35 +25,30 @@ export default class puchaseList extends NavigationMixin(LightningElement) {
         window.clearTimeout(this.delayTimeout);
         const searchRange = event.target.value;
 
-        console.log(searchRange);
-
         this.delayTimeout = setTimeout(() => {
-			this.searchRange = searchRange;
-		}, 300);
+            this.searchRange = searchRange;
+        }, 300);
     }
 
-    // // 追加ボタンを押された時の処理
-    // handleClick() {
+    // 追加ボタンを押された時の処理
+    applyWarehousing() {
+        // 正しくJSON形式に変換するために配列に格納
+        let PurchaseQuantity = this.PurchaseQuantity;
+
+        // JSONデータとレコードIdをAPEXに渡す。
+        setMissMatRecords({PurchaseQuantity : JSON.stringify(PurchaseQuantity)});
         
-    //     // データテーブルの選択した行データを取得する
-    //     var el = this.template.querySelector("lightning-datatable");
-    //     var selectedRecords = el.getSelectedRows();
+        // ページを更新して作成されたデータを表示させる。
+        location.reload();
+    }
 
-    //     // 画面を閉じる
-    //     this.dispatchEvent(new CloseActionScreenEvent());
-
-    //     // 正しくJSON形式に変換するために配列に格納
-    //     var param = [];
-    //     for (let key in selectedRecords) {
-    //         param.push(selectedRecords[key]);
-    //     }
-
-    //     // JSONデータとレコードIdをAPEXに渡す。
-    //     setMaterial({param : JSON.stringify(param), recipeId : this.recordId});
+    handleChange(event){
+        let cont = Number(event.target.value);
+        let key = event.target.id;
+        key = key.slice(0, 18);
         
-    //     // ページを更新して作成されたデータを表示させる。
-    //     location.reload();
-    // }
+        this.PurchaseQuantity[key] = cont;
+    }
 
     // // キャンセルボタンを押された時の処理
     // cancelClick() {

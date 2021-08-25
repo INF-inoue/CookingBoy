@@ -15,9 +15,9 @@ const wd = ['日', '月', '火', '水', '木', '金', '土'];
 export default class Schedule extends NavigationMixin(LightningElement) {
     formDate;
     dates;
-    @track dateRange;
+    dateRange;
     data;
-    @track dataRange;
+    dataRange;
     createFlag;
     dateRangeNum = 0;
     beforRengeFlag;
@@ -27,9 +27,16 @@ export default class Schedule extends NavigationMixin(LightningElement) {
     @wire(getSchedule, {formDate: '$formDate'})
     loadMaterial({data, error}) {
         if(data) {
-            this.dataRange = data.slice(3, 10);
-            this.data = data;
-            console.log(data);
+            let d = [];
+            for(let i = 0; i < 14; i++) {
+                d.push({
+                    data:data[i],
+                    date:this.dates[i]
+                });
+            }
+
+            this.dataRange = d.slice(3, 10);
+            this.data = d;
         } else if(error) {
             console.log("error === " + error);
         }
@@ -48,7 +55,6 @@ export default class Schedule extends NavigationMixin(LightningElement) {
 
         this.dates = dates;
         this.dateRange = dates.slice(3, 10);
-        console.log(this.dateRange);
 
         this.formDate = [
             refDate.getFullYear(), 
@@ -74,7 +80,7 @@ export default class Schedule extends NavigationMixin(LightningElement) {
         this.afterRengeFlag = (i >= 3);
         
         this.dataRange = this.data.slice(3 + i, 10 + i);
-        this.dateRange = this.dates.slice(3 + i, 10 + i);
+        // this.dateRange = this.dates.slice(3 + i, 10 + i);
     }
     
 
@@ -83,7 +89,7 @@ export default class Schedule extends NavigationMixin(LightningElement) {
         let d = refDate.getDate();
         let w = wd[refDate.getDay()];
 
-        return m + '/' + d + '/' + '(' + w + ')';
+        return m + '/' + d + '(' + w + ')';
     }
 
     handleClickApply(event) {
