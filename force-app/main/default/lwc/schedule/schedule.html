@@ -17,7 +17,6 @@
                         </template> -->
                         <th>日付</th>
                         <th>メニュー</th>
-                        <th>写真</th>
                         <th>完了にする</th>
                     </tr>
                 </thead>
@@ -25,18 +24,24 @@
                     <template for:each={dataRange} for:item="d">
                         <tr key={d.Id}>
                             <td>{d.date}</td>
-                            <td onclick={gotoRecodePage}
-                                title={d.data.Id}>{d.data.Name}</td>
                             <td>
-                                <lightning-formatted-rich-text
-                                    value={d.data.CompImage__c}
-                                    onclick={gotoRecodePage}
-                                    title={d.data.Id}
-                                ></lightning-formatted-rich-text>
+                                <button name={d.data.Id} onclick={gotoRecodePage}>
+                                    <lightning-card name={d.data.Id} title={d.data.Name} class="recipe-tile">
+                                        <lightning-formatted-rich-text
+                                            name={d.data.Id}
+                                            value={d.data.CompImage__c} 
+                                        ></lightning-formatted-rich-text>
+                                    </lightning-card>
+                                </button>
                             </td>
                             <td>
                                 <template if:false={d.data.CreateFlag__c}>
-                                    <lightning-button class="compButton" variant="brand" label="完了" value={d.data.ScheduleID__c} onclick={handleClickApply}></lightning-button>
+                                    <lightning-button class="compButton" 
+                                                      variant="brand" 
+                                                      label="完了" 
+                                                      value={d.data.ScheduleID__c} 
+                                                      onclick={handleClickApply}>
+                                    </lightning-button>
                                 </template>
                             </td>
                         </tr>

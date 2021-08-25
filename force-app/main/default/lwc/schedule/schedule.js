@@ -1,4 +1,4 @@
-import { LightningElement, wire, track } from 'lwc';
+import { LightningElement, wire } from 'lwc';
 import { updateRecord } from 'lightning/uiRecordApi';
 import { NavigationMixin } from 'lightning/navigation';
 // トースト機能を使用できる様にする。（保存時に出力されるメッセージのイベント）
@@ -128,8 +128,9 @@ export default class Schedule extends NavigationMixin(LightningElement) {
     }
 
     gotoRecodePage(event) {
-        let recodeID = event.target.title;
+        let recodeID = event.target.name;
 
+        console.log(recodeID);
         this[NavigationMixin.Navigate]({
             type: 'standard__recordPage',
             attributes: {
