@@ -1,3 +1,8 @@
+
+//＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠
+// 検索時の挙動がおかしいので、未完成です。。。
+//＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠＠
+
 import { publish, MessageContext } from 'lightning/messageService';
 import Material_LIST_UPDATE_MESSAGE from '@salesforce/messageChannel/MaterialListUpdate__c';
 import { NavigationMixin } from 'lightning/navigation';

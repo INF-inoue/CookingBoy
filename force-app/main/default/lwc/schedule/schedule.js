@@ -1,16 +1,28 @@
 import { LightningElement, wire } from 'lwc';
-import { updateRecord } from 'lightning/uiRecordApi';
 import { NavigationMixin } from 'lightning/navigation';
 // トースト機能を使用できる様にする。（保存時に出力されるメッセージのイベント）
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
+// Update, UpsertがApexでできなかったので、JSから実施するために、
+// 項目を取得できるようにしました。
 import SCHEDULE_ID from '@salesforce/schema/Schedule__c.Id';
 import SCHEDULE_FLAG from '@salesforce/schema/Schedule__c.CreateFlag__c';
 
+// レコードをアップデートするAPI
+import { updateRecord } from 'lightning/uiRecordApi';
+
+// スケジュールを取得するApexからメソッド
 import getSchedule from '@salesforce/apex/ScheduleController.getSchedule';
+
+// ApexからレコードをUpdateするために準備したメソッド
 // import setCreateFlag from '@salesforce/apex/ScheduleController.setCreateFlag';
 
+// 曜日コードに対応した曜日の日本語表記
 const wd = ['日', '月', '火', '水', '木', '金', '土'];
+
+// 度重なるアップデートにより、余計なプロセスを経ている部分があります。
+// あらかじめご了承ください。
+
 
 export default class Schedule extends NavigationMixin(LightningElement) {
     formDate;
@@ -24,10 +36,16 @@ export default class Schedule extends NavigationMixin(LightningElement) {
     afterRengeFlag;
     ScheduleID;
 
+    // formDateが更新されたときに、Apexのメソッドを実行してデータを取得します。
+    // ちなみに({data, error})を(result)にすると、JS内で変数を操作できないです。
+    // teratailに質問投稿して、自己解決しました。
+    // https://teratail.com/questions/355510#reply-485975
     @wire(getSchedule, {formDate: '$formDate'})
     loadMaterial({data, error}) {
+        // dataがあるとき
         if(data) {
             let d = [];
+            // htmlに渡せるようにデータを成形します。
             for(let i = 0; i < 14; i++) {
                 d.push({
                     data:data[i],
@@ -35,13 +53,20 @@ export default class Schedule extends NavigationMixin(LightningElement) {
                 });
             }
 
-            this.dataRange = d.slice(3, 10);
+            // 成形後のデータをインスタンス変数？に保存します。
             this.data = d;
+
+            // スケジュールに表示する7件をApexから取得したデータから
+            // ピックアップします。
+            // 最初は今日を基準に1日前から1週間分が表示されます。
+            this.dataRange = d.slice(3, 10);
         } else if(error) {
+            // エラー時のデータが出力されます。
             console.log("error === " + error);
         }
     }
 
+    // 今日を基準に日付範囲を取得します。
     getWeek(refDate) {
         let dates = [];
         let trimDate;
@@ -56,6 +81,7 @@ export default class Schedule extends NavigationMixin(LightningElement) {
         this.dates = dates;
         this.dateRange = dates.slice(3, 10);
 
+        // 年月日を配列形式でAPEXに渡す。
         this.formDate = [
             refDate.getFullYear(), 
             refDate.getMonth() + 1 ,
@@ -63,27 +89,34 @@ export default class Schedule extends NavigationMixin(LightningElement) {
         ];
     }
 
+    // 初期設定
     constructor() {
         super();
         
+        // 今日の日付を取得して、5日前の日付をgetweekに渡す。
         let refDate = new Date();
         refDate.setDate(refDate.getDate() - 5);
 
         this.getWeek(refDate);
     }
 
+    // 前へ、後へのボタンを押されたときの処理
     handleClick(event) {
+        // dateRangeNumに変更後のスケジュール範囲を取得
         this.dateRangeNum += Number(event.target.value);
         let i = this.dateRangeNum;
         
+        // iが持っているデータ範囲がデータ以上、以下になった時に
+        // ボタンが消えるようにflagを設定
         this.beforRengeFlag = (i <= -3);
         this.afterRengeFlag = (i >= 3);
         
+        // スケジュールの表示範囲を変更
         this.dataRange = this.data.slice(3 + i, 10 + i);
         // this.dateRange = this.dates.slice(3 + i, 10 + i);
     }
     
-
+    // 取得した日付を表示できるフォームにトリム
     getTrimDate(refDate) {
         let m = refDate.getMonth() + 1;
         let d = refDate.getDate();
@@ -92,19 +125,22 @@ export default class Schedule extends NavigationMixin(LightningElement) {
         return m + '/' + d + '(' + w + ')';
     }
 
+    // 完了ボタンを押したときのflag処理
     handleClickApply(event) {
 
+        // スケジュールIDを取得
         this.scheduleId = event.target.value;
         // レコード情報格納用
         const fields = {};
-        // 取得した取引先のIDを更新用の変数へ格納
+        // 取得したスケジュールのIDを更新用の変数へ格納
         fields[SCHEDULE_ID.fieldApiName] = this.scheduleId;
 
-        // 取得した取引先のIDを更新用の変数へ格納
+        // 完了のフラグをtrueにする
         fields[SCHEDULE_FLAG.fieldApiName] = true;
         
         const recordInput = { fields };
 
+        // アップデートの処理を実行して処理結果を表示
         updateRecord(recordInput)
             .then(()=> {
                 this.dispatchEvent(
@@ -127,10 +163,10 @@ export default class Schedule extends NavigationMixin(LightningElement) {
         location.reload();
     }
 
+    // レコードページへ
     gotoRecodePage(event) {
         let recodeID = event.target.name;
 
-        console.log(recodeID);
         this[NavigationMixin.Navigate]({
             type: 'standard__recordPage',
             attributes: {
@@ -141,6 +177,8 @@ export default class Schedule extends NavigationMixin(LightningElement) {
         })
     }
 
+    // 新しいスケジュールページ
+    // デフォルトの値を設定する方法をご存じでしたら教えてください。
     gotoNewSchedulePage() {
         // Opens the new Account record modal
         // to create an Account.

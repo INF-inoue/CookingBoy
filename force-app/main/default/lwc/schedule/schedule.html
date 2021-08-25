@@ -11,10 +11,6 @@
             <table>
                 <thead>
                     <tr>
-                        <!-- <th></th>
-                        <template for:each={dateRange} for:item="date">
-                            <th id={date} key={date}>{date}</th>
-                        </template> -->
                         <th>日付</th>
                         <th>メニュー</th>
                         <th>完了にする</th>
@@ -25,14 +21,12 @@
                         <tr key={d.Id}>
                             <td>{d.date}</td>
                             <td>
-                                <button name={d.data.Id} onclick={gotoRecodePage}>
-                                    <lightning-card name={d.data.Id} title={d.data.Name} class="recipe-tile">
-                                        <lightning-formatted-rich-text
-                                            name={d.data.Id}
-                                            value={d.data.CompImage__c} 
-                                        ></lightning-formatted-rich-text>
-                                    </lightning-card>
-                                </button>
+                                <lightning-card onclick={gotoRecodePage} name={d.data.Id} title={d.data.Name} class="recipe-tile">
+                                    <lightning-formatted-rich-text
+                                        name={d.data.Id}
+                                        value={d.data.CompImage__c} 
+                                    ></lightning-formatted-rich-text>
+                                </lightning-card>
                             </td>
                             <td>
                                 <template if:false={d.data.CreateFlag__c}>
@@ -46,36 +40,6 @@
                             </td>
                         </tr>
                     </template>
-                    <!-- <tr>
-                        <td>メニュー</td>
-                        <template for:each={dataRange} for:item="d">
-                            <td key={d.Id}>
-                                <button class="recordPageLinks" onclick={gotoRecodePage} title={d.Id}>{d.Name}</button>
-                            </td>
-                        </template>
-                    </tr>
-                    <tr>
-                        <td id="img">img</td>
-                        <template for:each={dataRange} for:item="d">
-                            <td id={d.Id} key={d.Id}>
-                                <lightning-formatted-rich-text
-                                    value={d.CompImage__c}
-                                    onclick={gotoRecodePage}
-                                    title={d.Id}
-                                ></lightning-formatted-rich-text>
-                            </td>
-                        </template>
-                    </tr>
-                    <tr>
-                        <td>調理済にする</td>
-                        <template for:each={dataRange} for:item="d">
-                            <td key={d.id}>
-                                <template if:false={d.CreateFlag__c}>
-                                    <lightning-button class="compButton" variant="brand" label="完了" value={d.ScheduleID__c} onclick={handleClickApply}></lightning-button>
-                                </template>
-                            </td>
-                        </template>
-                    </tr> -->
                 </tbody>
             </table>
         </lightning-layout>

@@ -7,7 +7,7 @@
     float: right;
 }
 
-.-tile {
+.recipe-tile {
   padding: 0 10px;
   border: 1px solid #d2955d;
   background-color: #fae8d2;
@@ -15,15 +15,11 @@
   display: block;
 }
 
-.recordPageLinks{
-    cursor: pointer;
-    border: none;
-    background: none;
-    color: #0033cc;
-}
-.recordPageLinks:hover{
-    text-decoration: underline;
-    color: #002080;
+.recipe-tile:hover{
+  text-decoration: underline;
+  border: 1px solid #cc8644;
+  background-color: #f5d3a9;
+  cursor : pointer;
 }
 
 table{
