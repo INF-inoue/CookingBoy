@@ -8,6 +8,8 @@
 }
 
 .recipe-tile {
+  width: 100%;
+  height: auto;
   padding: 0 10px;
   border: 1px solid #d2955d;
   background-color: #fae8d2;

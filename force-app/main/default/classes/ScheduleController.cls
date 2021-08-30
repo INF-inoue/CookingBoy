@@ -20,18 +20,12 @@ public with sharing class ScheduleController {
             }
         }
 
-        // IDリストからレシピオブジェクトを取得
-        List<Recipe__c> recipeObje = [
+        // レシピmapを作成
+         Map<Id, Recipe__c> mapRecipe = new Map<Id, Recipe__c>([
             SELECT Id, Name, CompImage__c, ScheduleID__c
             FROM Recipe__c
             WHERE Id IN :recipeId
-        ];
-
-        // IDでレシピを取得できるようにMap作成
-        Map<Id, Recipe__c> mapRecipe = new Map<Id, Recipe__c>();
-        for(Recipe__c r : recipeObje) {
-            mapRecipe.put(r.Id, r);
-        }
+        ]);
 
         // 戻り値用のネストListを作成
         // 曜日に対して、レシピのリストを格納する(2品以上ある可能性を考慮)

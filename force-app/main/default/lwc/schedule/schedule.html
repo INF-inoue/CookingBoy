@@ -21,12 +21,15 @@
                         <tr key={d.Id}>
                             <td>{d.date}</td>
                             <td>
-                                <lightning-card onclick={gotoRecodePage} name={d.data.Id} title={d.data.Name} class="recipe-tile">
+                                <div onclick={gotoRecodePage} 
+                                    name={d.data.Id} 
+                                    class="recipe-tile">
+                                    <p>{d.data.Name} </p>
                                     <lightning-formatted-rich-text
                                         name={d.data.Id}
                                         value={d.data.CompImage__c} 
                                     ></lightning-formatted-rich-text>
-                                </lightning-card>
+                                </div>
                             </td>
                             <td>
                                 <template if:false={d.data.CreateFlag__c}>
