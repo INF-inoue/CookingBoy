@@ -17,26 +17,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <template for:each={dataRange} for:item="d">
-                        <tr key={d.Id}>
-                            <td>{d.date}</td>
+                    <template for:each={dataRange} for:item="data">
+                        <tr key={data.Id}>
+                            <td>{data.date}</td>
                             <td>
-                                <div onclick={gotoRecodePage} 
-                                    name={d.data.Id} 
-                                    class="recipe-tile">
-                                    <p>{d.data.Name} </p>
-                                    <lightning-formatted-rich-text
-                                        name={d.data.Id}
-                                        value={d.data.CompImage__c} 
-                                    ></lightning-formatted-rich-text>
+                                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small">
+                                    <div class="slds-size_3-of-4">
+                                        <template for:each={data.data} for:item="d"> 
+                                            <lightning-card disable-auto-scroll key={d.Id} onclick={gotoRecodePage} name={d.Id} title={d.Name} class="recipe-tile">
+                                                <lightning-carousel-image>                                                    
+                                                    <lightning-formatted-rich-text
+                                                        value={d.CompImage__c} 
+                                                    ></lightning-formatted-rich-text>
+                                                </lightning-carousel-image>
+                                            </lightning-card>
+                                        </template>
+                                    </div>
                                 </div>
                             </td>
                             <td>
-                                <template if:false={d.data.CreateFlag__c}>
+                                <template if:false={data.data.CreateFlag__c}>
                                     <lightning-button class="compButton" 
                                                       variant="brand" 
                                                       label="完了" 
-                                                      value={d.data.ScheduleID__c} 
+                                                      value={data.data.ScheduleID__c} 
                                                       onclick={handleClickApply}>
                                     </lightning-button>
                                 </template>
